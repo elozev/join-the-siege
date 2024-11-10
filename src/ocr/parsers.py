@@ -1,9 +1,10 @@
-from pdf2image import convert_from_bytes, convert_from_path
-from io import BytesIO
-from PIL import Image
-import pytesseract
+"""Functions for parsing images and PDFs using Tesseract OCR."""
 
-SUPPORTED_FILE_TYPES = [".pdf", ".jpg", ".jpeg", ".png"]
+from io import BytesIO
+from pdf2image import convert_from_bytes, convert_from_path
+import pytesseract
+from PIL import Image
+from src.utils.constants import SUPPORTED_FILE_TYPES
 
 def stream_to_bytes(file):
   """Convert a file stream to bytes."""
