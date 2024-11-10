@@ -47,12 +47,10 @@ jobs:
       - name: Test
         run: |
           pytest tests
-  build:
-  # GCLOUD_CREDENTIALS
+  build-push:
     runs-on: ubuntu-latest
     environment: main
-    # TODO: uncomment this once we have tests
-    # needs: test
+    needs: test
     env:
       GCLOUD_CREDENTIALS: ${{ secrets.GCLOUD_CREDENTIALS }}
     steps:
@@ -69,3 +67,24 @@ jobs:
           image_name: join-the-siege/base
           image_tag: latest, ${{ steps.get_short_sha.outputs.SHORT_SHA }}
           dockerfile: ./Dockerfile
+  deploy-to-cloud-run:
+    runs-on: ubuntu-latest
+    environment: main
+    needs: build-push
+    steps:
+      - uses: 'google-github-actions/auth@v2'
+        with:
+          credentials_json: ${{ secrets.GCLOUD_CREDENTIALS }}
+      - name: Get short commit SHA
+        id: get_short_sha
+        run: |
+          echo "SHORT_SHA=${GITHUB_SHA:0:7}" >> $GITHUB_OUTPUT
+      - uses: GoogleCloudPlatform/github-actions/deploy-cloud-run@v1
+        with:
+          service: base
+          image: europe-west2-docker.pkg.dev/heron-data-441322/join-the-siege/base:${{ steps.get_short_sha.outputs.SHORT_SHA }}
+          region: europe-west2
+          project_id: heron-data-441322
+          env_vars: |-
+            OPENAI_API_KEY=${{ secrets.OPENAI_API_KEY }}
+
