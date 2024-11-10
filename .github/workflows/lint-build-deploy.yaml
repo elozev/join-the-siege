@@ -60,7 +60,7 @@ jobs:
       - uses: RafikFarhad/push-to-gcr-github-action@v5-rc1
         with:
           gcloud_service_key: ${{ secrets.GCLOUD_CREDENTIALS }}
-          registry: gcr.io
+          registry: europe-west2-docker.pkg.dev
           project_id: heron-data-441322
           image_name: join-the-siege
           image_tag: latest, ${GITHUB_SHA:0:7}
