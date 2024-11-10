@@ -23,7 +23,7 @@ jobs:
           pylint --rcfile=.pylintrc src tests
   test:
     runs-on: ubuntu-latest
-    depends-on: lint
+    needs: lint
     strategy:
       matrix:
         python-version: ["3.12.x"]
