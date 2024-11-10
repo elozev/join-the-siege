@@ -47,3 +47,21 @@ jobs:
       - name: Test
         run: |
           pytest tests
+  build:
+  # GCLOUD_CREDENTIALS
+    runs-on: ubuntu-latest
+    environment: main
+    # TODO: uncomment this once we have tests
+    # needs: test
+    env:
+      GCLOUD_CREDENTIALS: ${{ secrets.GCLOUD_CREDENTIALS }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: RafikFarhad/push-to-gcr-github-action@v5-rc1
+        with:
+          gcloud_service_key: ${{ secrets.GCLOUD_CREDENTIALS }}
+          registry: gcr.io
+          project_id: heron-data-441322
+          image_name: join-the-siege
+          image_tag: latest, ${GITHUB_SHA:0:7}
+          dockerfile: ./Dockerfile
