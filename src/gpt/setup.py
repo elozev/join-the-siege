@@ -1,14 +1,12 @@
-__package__ = "gpt"
 import os
-from ocr.extract import ocr_extract_text
+from src.ocr.extract import ocr_extract_text
 from openai import OpenAI
 from dotenv import load_dotenv
 
 load_dotenv()
 
 client = OpenAI(
-    # This is the default and can be omitted
-    api_key=os.environ.get("OPENAI_API_KEY")
+  api_key=os.environ.get("OPENAI_API_KEY")
 )
 
 
