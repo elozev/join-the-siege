@@ -1,7 +1,10 @@
+"""Setup for the GPT-3.5-turbo document classifier."""
+
 import os
-from src.ocr.extract import ocr_extract_text
 from openai import OpenAI
 from dotenv import load_dotenv
+from src.ocr.parsers import ocr_extract_text_from_path
+from src.utils.constants import ALLOWED_LABELS, TRAINING_FILES
 
 load_dotenv()
 
@@ -9,47 +12,28 @@ client = OpenAI(
   api_key=os.environ.get("OPENAI_API_KEY")
 )
 
-
-few_shot_prompts = """
+FEW_SHOT_PROMPTS = """
 Classify a document based on its content. 
 Here are examples of different types of documents:
 
 """
 
-LABEL_BANK_STATEMENT="bank-statement"
-LABEL_INVOICE="invoice"
-LABEL_DRIVER_LICENSE="driver-license"
-
-allowed_labels = {'bank-statement', 'invoice', 'driver-license', 'other'}
-
-training_files = {
-  "bank_statement_1.pdf": list(allowed_labels)[0],
-  "bank_statement_2.pdf": list(allowed_labels)[0],
-  "bank_statement_3.pdf": list(allowed_labels)[0],
-  "drivers_license_1.jpg": list(allowed_labels)[1],
-  "drivers_license_2.jpg": list(allowed_labels)[1],
-  "drivers_license_3.jpg": list(allowed_labels)[1],
-  "invoice_1.pdf": list(allowed_labels)[2],
-  "invoice_2.pdf": list(allowed_labels)[2],
-  "invoice_3.pdf": list(allowed_labels)[2],
-}
-
 def get_prompt(base_files: dict):
   """
   Get the prompt for the document classifier.
   """
-  prompt = few_shot_prompts
+  prompt = FEW_SHOT_PROMPTS
   example_count = 1
   for file, label in base_files.items():
-    fileText = ocr_extract_text(f"./files/{file}")
+    text = ocr_extract_text_from_path(f"./files/{file}")
 
-    prompt += f"Example {example_count}:\nText:\"{fileText}\"\nLabel:\"{label}\"\n\n"
+    prompt += f"Example {example_count}:\nText:\"{text}\"\nLabel:\"{label}\"\n\n"
     example_count += 1
 
   prompt += "Classify the following document:\n\n\"{text}\""
   return prompt
 
-base_prompt = get_prompt(training_files)
+base_prompt = get_prompt(TRAINING_FILES)
 
 def classify_document(text: str):
   """
@@ -64,7 +48,7 @@ def classify_document(text: str):
         "role": "system", 
         "content": f"""
         You are a document classifier. You will be given text extracts from a document and 
-        you need to classify it into one of the following categories: {allowed_labels}. 
+        you need to classify it into one of the following categories: {ALLOWED_LABELS.values()}.
         Return only the label, not the text, without any other text or formatting.
         """
       },
@@ -72,5 +56,5 @@ def classify_document(text: str):
     ]
   )
 
-  document_type = response.choices[0].message.content
+  document_type = response.choices[0].message.content or "other"
   return document_type
