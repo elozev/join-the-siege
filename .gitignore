@@ -4,3 +4,6 @@ venv
 .vscode
 __pycache__
 *.pyc
+
+# Ingore test files
+files/test*
