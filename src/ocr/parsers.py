@@ -1,6 +1,7 @@
 """Functions for parsing images and PDFs using Tesseract OCR."""
 
 from io import BytesIO
+import functools
 from pdf2image import convert_from_bytes, convert_from_path
 import pytesseract
 from PIL import Image
@@ -11,6 +12,7 @@ def stream_to_bytes(file):
   bytes_data = BytesIO(file.read()).getvalue()
   return bytes_data
 
+@functools.cache
 def ocr_extract_text_from_path(image_path: str) -> str:
   """Extract text from an image using Tesseract OCR. 
   If the file is a PDF, it will be converted to images and then processed.

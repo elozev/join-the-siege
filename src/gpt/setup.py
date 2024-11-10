@@ -33,12 +33,12 @@ def get_prompt(base_files: dict):
   prompt += "Classify the following document:\n\n\"{text}\""
   return prompt
 
-base_prompt = get_prompt(TRAINING_FILES)
-
 def classify_document(text: str):
   """
   Classify a document based on its text.
   """
+  base_prompt = get_prompt(TRAINING_FILES)
+
   prompt = base_prompt.format(text=text)
 
   response = client.chat.completions.create(
