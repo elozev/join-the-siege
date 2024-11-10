@@ -1,5 +1,4 @@
-from flask import Flask, request, jsonify
-from src.classifier import classify_file
+from flask import Flask
 from src.routes.files import files_bp
 from dotenv import load_dotenv
 
