@@ -21,3 +21,10 @@ jobs:
       - name: Lint
         run: |
           pylint --rcfile=.pylintrc src tests
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install dependencies
+        run: |
+          pip install -r requirements.txt
