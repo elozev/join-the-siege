@@ -57,11 +57,15 @@ jobs:
       GCLOUD_CREDENTIALS: ${{ secrets.GCLOUD_CREDENTIALS }}
     steps:
       - uses: actions/checkout@v4
+      - name: Get short commit SHA
+        id: get_short_sha
+        run: |
+          echo "SHORT_SHA=${GITHUB_SHA:0:7}" >> $GITHUB_OUTPUT
       - uses: RafikFarhad/push-to-gcr-github-action@v5-rc1
         with:
           gcloud_service_key: ${{ secrets.GCLOUD_CREDENTIALS }}
           registry: europe-west2-docker.pkg.dev
           project_id: heron-data-441322
           image_name: join-the-siege
-          image_tag: latest, ${GITHUB_SHA:0:7}
+          image_tag: latest, ${{ steps.get_short_sha.outputs.SHORT_SHA }}
           dockerfile: ./Dockerfile
