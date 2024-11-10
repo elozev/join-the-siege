@@ -28,7 +28,6 @@ def classify_file_route():
     return jsonify({"error": f"File type {file_type} not allowed"}), 400
 
   text = ocr_extract_text(file, file_type)
-
   file_type = classify_document(text)
 
   return jsonify({"file_type": file_type}), 200

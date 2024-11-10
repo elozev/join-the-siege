@@ -1,8 +1,7 @@
+"""Main application file."""
+
 from flask import Flask
 from src.routes.files import files_bp
-from dotenv import load_dotenv
-
-load_dotenv()
 
 app = Flask(__name__)
 

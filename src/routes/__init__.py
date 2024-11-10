@@ -1,1 +1,1 @@
-# routes/__init__.py
+"""Routes for the application."""
