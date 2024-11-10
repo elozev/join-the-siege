@@ -7,3 +7,6 @@ __pycache__
 
 # Ingore test files
 files/test*
+
+# Ignore environment variables
+.env
