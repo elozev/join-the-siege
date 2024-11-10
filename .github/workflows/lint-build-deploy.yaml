@@ -66,6 +66,6 @@ jobs:
           gcloud_service_key: ${{ secrets.GCLOUD_CREDENTIALS }}
           registry: europe-west2-docker.pkg.dev
           project_id: heron-data-441322
-          image_name: join-the-siege
+          image_name: join-the-siege/base
           image_tag: latest, ${{ steps.get_short_sha.outputs.SHORT_SHA }}
           dockerfile: ./Dockerfile
