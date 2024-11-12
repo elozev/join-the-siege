@@ -1,0 +1,4 @@
+[MAIN]
+indent-string="  "
+max-line-length=120
+disable=redefined-outer-name
