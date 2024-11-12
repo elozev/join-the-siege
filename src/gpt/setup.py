@@ -9,7 +9,7 @@ from src.utils.constants import ALLOWED_LABELS, TRAINING_FILES
 load_dotenv()
 
 client = OpenAI(
-  api_key=os.environ.get("OPENAI_API_KEY")
+  api_key=os.environ.get("OPENAI_API_KEY") or ""
 )
 
 FEW_SHOT_PROMPTS = """
