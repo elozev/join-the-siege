@@ -1,5 +1,42 @@
 # Heron Coding Challenge - File Classifier
 
+### Emil's take on the challenge
+> Note: This is one of the few times I've written Python code, so please forgive me if the code is not up to standard. I've tried my best. Same goes for the GitHub Actions workflow.
+
+
+The challenge is to improve the classifier by adding features and optimisations to handle (1) poorly named files, (2) scaling to new industries, and (3) processing larger volumes of documents. In order to handle the first two points, I've removed the existing classifier and replaced it with the following two components:
+1. A text extraction using Google open-source Tesseract OCR.  
+2. OpenAI's `gpt-3.5-turbo` model, which has been propmted to classify the document based on the extracted text. The GPT has been prompted using the extracted text from the files in the `files/` directory.
+
+I've added a Dockerfile and a GitHub Actions workflow to build and deploy the classifier to Google Cloud Run.
+
+A diagram of the system is shown below:
+
+![System diagram](./assets/diagram.png)
+
+
+## How to access the classifier
+
+The classifier is deployed to Google Cloud Run and can be accessed at https://join-the-siege-847542637991.europe-west2.run.app.
+
+> Note: The first time you access the endpoint, it may take a few seconds to warm up as the Google Cloud Run scales to 0 instances.
+
+The two available endpoints are:
+
+- `GET /api/v1/files/`
+    - Returns a welcome message.
+
+- `POST /api/v1/files/classify-file`
+    - Classifies a file based on its content.
+
+Example usage:
+```
+$ curl -XGET https://join-the-siege-847542637991.europe-west2.run.app/api/v1/files/
+{"message":"Welcome to the files API!"}
+$ curl -XPOST -F 'file=@./files/drivers_license_3.jpg' https://join-the-siege-847542637991.europe-west2.run.app/api/v1/files/classify-file
+{"file_type":"drivers-license"}
+```
+
 ## Overview
 
 At Heron, we’re using AI to automate document processing workflows in financial services and beyond. Each day, we handle over 100,000 documents that need to be quickly identified and categorised before we can kick off the automations.
