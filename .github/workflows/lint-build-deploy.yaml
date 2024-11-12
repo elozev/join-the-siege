@@ -1,6 +1,9 @@
 name: lint-build-deploy
 
-on: [push]
+on:
+  push:
+    branches:
+      - '*'
 
 jobs:
   lint:
@@ -63,6 +66,7 @@ jobs:
     runs-on: ubuntu-latest
     environment: main
     needs: build-push
+    if: github.ref == 'refs/heads/main'
     steps:
       - uses: actions/checkout@v4
       - uses: 'google-github-actions/auth@v2'
