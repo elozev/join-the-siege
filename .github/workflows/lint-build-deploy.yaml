@@ -74,9 +74,9 @@ jobs:
         id: get_short_sha
         run: |
           echo "SHORT_SHA=${GITHUB_SHA:0:7}" >> $GITHUB_OUTPUT
-      - uses: GoogleCloudPlatform/github-actions/deploy-cloud-run@v1
+      - uses: google-github-actions/deploy-cloudrun@v2
         with:
-          service: base
+          service: join-the-siege
           image: europe-west2-docker.pkg.dev/heron-data-441322/join-the-siege/base:${{ steps.get_short_sha.outputs.SHORT_SHA }}
           region: europe-west2
           project_id: heron-data-441322
