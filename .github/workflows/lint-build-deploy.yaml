@@ -22,8 +22,6 @@ jobs:
     runs-on: ubuntu-latest
     needs: lint
     environment: main
-    env:
-      OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
     steps:
       - uses: actions/checkout@v4
       - name: Set up Python ${{ matrix.python-version }}
